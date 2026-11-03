@@ -1,11 +1,19 @@
-import pytest 
+import pytest
+import numpy as np
 
-#importing functions
-from Basic_Functions.reading_functions_fromDB import load_DB_from_JSON, get_spectrum_from_DB
+from Basic_Functions.Baseline_correction import (
+    wavenumber,
+    wavenumber_to_index,
+    slicing_all_BD,
+    baseline_correction,
+    batch_baseline_correction,
+    plot_baseline_correction
+)
 
-example_DB = r"C:\Users\liatc\OneDrive\Documentos\GreenStone_Yaxchilan\Database\Yaxchilan_Alpha1_septiembre_2019_tumba_1_Reflectance_DB.json"
+#----------------------------Testing baseline corrcection functions---------------------------------
 
-def test_load_DB_from_JSON(DB: dict = load_DB_from_JSON(example_DB)):
-    assert isinstance(DB, dict), "The loaded DB should be a dictionary."
-    assert len(DB) > 0, "The loaded DB should not be empty."
-    
+@pytest.mark.parametrize("wavenumber, goal_wavenumber, expected_index", [(np.linspace(400, 4000, 1764), 400, 0), 
+                                                                          (np.linspace(400, 4000, 1764), 4000, 1763), 
+                                                                          (np.linspace(400, 4000, 1764), 2200, 882)])
+def test_wavenumber_to_index(wavenumber, goal_wavenumber, expected_index):
+    assert wavenumber_to_index(wavenumber, goal_wavenumber) == expected_index

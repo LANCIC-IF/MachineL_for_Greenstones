@@ -5,22 +5,36 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 def load_DB_from_JSON(input_file: str) -> dict:
-    with open(input_file, 'r') as f:
-        data = json.load(f)
-    # Convert lists back to numpy arrays
-    DB = {key: np.array(value) for key, value in data.items()}
-    return DB
+    try: 
+        with open(input_file, 'r') as f:
+            data = json.load(f)
+        # Convert lists back to numpy arrays
+        DB = {key: np.array(value) for key, value in data.items()}
+        return DB
+    except FileNotFoundError:
+        print(f"File not found: {input_file}")
+        return {}
+    except json.JSONDecodeError as e:
+        print(f"Invalid JSON in file: {input_file}")
+        print(f"Error: {e.msg}")
+        return {}
 
 def get_spectrum_from_DB(DB: dict, filename: str) -> np.ndarray:
-    return DB.get(filename, "Filename not found in DB")
-
+    try:
+        return DB[filename]
+    except KeyError:
+        print(f"Filename '{filename}' not found in the database.")
+        return np.array([])  # Return an empty array if the filename is not found
 
     
 def retriving_keys_from_DB(DB: dict) -> list:
-    return list(DB.keys())
+    try:
+        return list(DB.keys())
+    except Exception as e:
+        print(f"Error occurred while retrieving keys from the database: {e}")
+        return []
 
 #----------------------------------------------------------------------------------------------
-
 
 if __name__ == "__main__":
     DB = load_DB_from_JSON("path_to_your_json_file.json")

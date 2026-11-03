@@ -1,6 +1,7 @@
 import numpy as np
 from pybaselines import Baseline, utils
 import matplotlib.pyplot as plt
+import math
 
 
 def wavenumber(complete_spectra: np.ndarray, start_wavenumber: float, end_wavenumber: float) -> np.ndarray:
@@ -9,10 +10,10 @@ def wavenumber(complete_spectra: np.ndarray, start_wavenumber: float, end_wavenu
     return np.linspace(start_wavenumber, end_wavenumber, n_points)
                        
                        
-def wavenumber_to_index(wavenumber: np.ndarray, goal_wavenumber: float) -> np.ndarray:
+def wavenumber_to_index(wavenumber: np.ndarray, goal_wavenumber: float) -> int:
     
     step_of_spectra = wavenumber[1] - wavenumber[0]
-    index = int(round(goal_wavenumber - wavenumber[0]) / step_of_spectra)
+    index = math.ceil((goal_wavenumber - wavenumber[0]) / step_of_spectra)
     return index
 
 def slicing_all_BD(spectra_DB: dict, start: int, end: int) -> dict:
@@ -67,7 +68,7 @@ if __name__ == "__main__":
     goal_value = 500
     
     sliced_DB = slicing_all_BD(spectra_DB, min_value, goal_value)
-    print("length of sliced_DB:", len(sliced_DB["file1"]))  # Should print 501
+    print("length of sliced_DB:", len(sliced_DB["file1"]))  
     
     
     #making baseline correction
