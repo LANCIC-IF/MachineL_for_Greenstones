@@ -1,6 +1,8 @@
 numpy
 matplotlib
 pandas
-pytest
 pybaselines
 SciPy
+
+#optional dependencies
+pytest
