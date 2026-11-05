@@ -1,0 +1,9 @@
+
+name = "BasicFunctions"
+version = "0.1.0"
+description = "basic funcions for processing signals" 
+authors = [{name = "Liat Colmenares", email = "liat@estudiantes.fisica.unam.mx"}]
+readme = "README.md"
+dependencies = "requirements.txt"
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
