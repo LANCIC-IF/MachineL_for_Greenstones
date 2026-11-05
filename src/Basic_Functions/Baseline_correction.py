@@ -8,30 +8,55 @@ def wavenumber(complete_spectra: np.ndarray, start_wavenumber: float, end_wavenu
     
     n_points = complete_spectra.shape[0]
     return np.linspace(start_wavenumber, end_wavenumber, n_points)
-                       
-                       
+
+
+#Use it when you have explicitly defined wavenumber array and you want to find the index of a specific wavenumber value                       
 def wavenumber_to_index(wavenumber: np.ndarray, goal_wavenumber: float) -> int:
     
     step_of_spectra = wavenumber[1] - wavenumber[0]
     index = math.ceil((goal_wavenumber - wavenumber[0]) / step_of_spectra)
     return index
 
-def slicing_all_BD(spectra_DB: dict, start: int, end: int) -> dict:
+
+#use it when you only have reflectance array and you want to find the index of a specific wavenumber value
+def wavenumber_to_index_reflectance_array(reflectance: np.ndarray, left_wn : float, right_wn: float, goal_wavenumber: float) -> int:
+    n_points = reflectance.shape[0]
+    step_of_spectra = (right_wn - left_wn) / (n_points - 1)
+    index = math.ceil((goal_wavenumber - left_wn) / step_of_spectra)
+    return index
+
+
+#use it when you have known the exact position of the slice
+def slicing_all_BD_position(spectra_DB: dict, start: int, end: int) -> dict:
     sliced_DB = {}
     for filename, spectra in spectra_DB.items():
         sliced_DB[filename] = spectra[start:end + 1]
     return sliced_DB
 
-def baseline_correction(spectra: np.ndarray, wavenumber: np.ndarray) -> np.ndarray:
+#use it when you only know the wavenumber range of the slice
+def slicing_all_BD_wavenumber(spectra_DB: dict,left_wn: float, right_wn: float, startslice_wavenumber:float, endslice_wavenumber: float) -> dict:
+    sliced_DB = {}
+    first_position = wavenumber_to_index_reflectance_array(next(iter(spectra_DB.values())), left_wn, right_wn, startslice_wavenumber)
+    last_position = wavenumber_to_index_reflectance_array(next(iter(spectra_DB.values())), left_wn, right_wn, endslice_wavenumber)
+
+    for filename, spectra in spectra_DB.items():
+        sliced_DB[filename] = spectra[first_position:last_position + 1]
+
+    return sliced_DB
+
+#use it when u want to correct the baseline of a single spectra
+def baseline_correction(spectra: np.ndarray, wavenumber: np.ndarray, poly_order: int) -> np.ndarray:
     baseline_fitter = Baseline(x_data = wavenumber)
-    baseline, params = baseline_fitter.modpoly(spectra, poly_order=1)
-    
+    baseline, params = baseline_fitter.modpoly(spectra, poly_order=poly_order)
+
     return spectra - baseline
 
-def batch_baseline_correction(spectra_DB: dict, wavenumber: np.ndarray) -> dict:
+
+#use it when u want to correct the baseline of a batch of spectra, you have to pre-slice your DB 
+def batch_baseline_correction(spectra_DB: dict, wavenumber: np.ndarray, poly_order: int) -> dict:
     corrected_baseline_DB = {}
     for filename, spectra in spectra_DB.items():
-        corrected_spectra = baseline_correction(spectra, wavenumber)
+        corrected_spectra = baseline_correction(spectra, wavenumber, poly_order)
         corrected_baseline_DB[filename] = corrected_spectra
     return corrected_baseline_DB
 
@@ -67,7 +92,7 @@ if __name__ == "__main__":
     max_value = 1000
     goal_value = 500
     
-    sliced_DB = slicing_all_BD(spectra_DB, min_value, goal_value)
+    sliced_DB = slicing_all_BD_position(spectra_DB, min_value, goal_value)
     print("length of sliced_DB:", len(sliced_DB["file1"]))  
     
     
