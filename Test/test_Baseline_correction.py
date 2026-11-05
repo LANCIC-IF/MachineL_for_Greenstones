@@ -8,8 +8,7 @@ from Basic_Functions.Baseline_correction import (
     slicing_all_BD_position,
     slicing_all_BD_wavenumber,
     baseline_correction,
-    batch_baseline_correction,
-    plot_baseline_correction
+    batch_baseline_correction
 )
 
 #----------------------------Testing baseline corrcection functions---------------------------------
@@ -56,7 +55,19 @@ def test_slicing_all_BD_only_wavenumber(spectra_DB, left_wn, right_wn, startslic
 
 
 #test baselinecorrection of a single spectra
-@pytest.mark.parametrize("spectra, wn, corrected_spectra", [
-    (np.array([1, 2, 3, 2, 3, 4, 5, 4, 3, 2, 1]), np.array([400, 800, 1200, 1600, 2000]), np.array([-1.0, 0.0, 1.0, 0.0, -1.0]))])    
-def test_baseline_correction(spectra, wn, corrected_spectra):
-    assert baseline_correction(spectra, wn) == corrected_spectra
+@pytest.mark.parametrize("spectra, wn, poly_order, corrected_spectra", [
+    (np.array([1, 2, 3, 2, 3, 4, 5, 4, 3, 2]), np.linspace(400, 4000, 10), 1, np.array([0, 1, 2, 1, 2, 3, 4, 3, 2, 0]))])    
+def test_baseline_correction(spectra, wn, poly_order, corrected_spectra):
+    assert np.array_equal(baseline_correction(spectra, wn, poly_order), corrected_spectra)
+
+
+#always fix the spectra to cero baseline 
+@pytest.mark.parametrize("spectra_DB, wn, poly_order, expected_corrected_baseline_DB", [
+    ({"file1": np.array([1, 2, 3, 2, 3, 4, 5, 4, 3, 2]), "file2": np.array([2, 3, 4, 3, 4, 5, 6, 5, 4, 3])}, 
+     np.linspace(400, 4000, 10), 1,
+     {"file1": np.array([0, 1, 2, 1, 2, 3, 4, 3, 2, 0]), "file2": np.array([0, 1, 2, 1, 2, 3, 4, 3, 2, 0])})])
+def test_batch_baseline_correction(spectra_DB, wn, poly_order, expected_corrected_baseline_DB):
+    corrected_baseline_DB = batch_baseline_correction(spectra_DB, wn, poly_order)
+    for filename in spectra_DB.keys():
+        assert np.array_equal(corrected_baseline_DB[filename], expected_corrected_baseline_DB[filename])
+    
