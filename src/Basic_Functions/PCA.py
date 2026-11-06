@@ -15,6 +15,7 @@ def PCA (X):
     # Sort the eigenvalues and eigenvectors in descending order
     sorted_indices = np.argsort(eigenvalues)[::-1]
     sorted_eigenvalues = eigenvalues[sorted_indices]
-    sorted_eigenvectors = eigenvectors[:, sorted_indices]
+    sorted_eigenvectors = eigenvectors[:, sorted_indices] * -1
     
     return sorted_eigenvalues, sorted_eigenvectors
+    #return eigenvalues, eigenvectors
