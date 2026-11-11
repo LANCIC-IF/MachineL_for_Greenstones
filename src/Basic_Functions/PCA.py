@@ -1,6 +1,14 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 
+#ML libraries
+import sklearn as sk
+
+#plotting libraries
+import plotly 
+
+
+
 
 def PCA (X):
     # Center the data
@@ -19,3 +27,17 @@ def PCA (X):
     
     return sorted_eigenvalues, sorted_eigenvectors
     #return eigenvalues, eigenvectors
+    
+    
+def proyecting_data (X, eigenvectors, n_components):
+    # Select the top n_components eigenvectors
+    top_eigenvectors = eigenvectors[:, :n_components]
+    
+    # Project the data onto the new feature space
+    X_projected = np.dot(X, top_eigenvectors)
+    
+    return X_projected
+    
+
+def movile_PCAplot ():
+    return 1

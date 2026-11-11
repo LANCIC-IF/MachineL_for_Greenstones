@@ -1,7 +1,7 @@
 import pytest 
 import numpy as np 
 #importing internal functions
-from Basic_Functions.reading_functions_fromDB import load_DB_from_JSON, get_spectrum_from_DB
+from Basic_Functions.reading_functions_fromDB import load_DB_from_JSON, get_spectrum_from_DB, retriving_labels_from_keys, retriving_keys_from_DB
 
 
 #--------------Testing DB's -------------------------------------------------------
@@ -42,3 +42,8 @@ def test_retriving_keys_from_DB_empty(DB: dict = load_DB_from_JSON(empty_DB)):
     assert len(keys) == 0 and type(keys) == list, "The keys should be an empty list."
     
 
+#test for retriving labels from keys, specialized for the format of the keys in the DB, which is "label1_label2"_number.0
+@pytest.mark.parametrize("DB, expected_labels", [({"blanco_frente_1.0": [0,1,2], "blanco_reverso_1.0S": [0,1,2]}, [("blanco", "frente"), ("blanco", "reverso")])])
+def test_retriving_labels_from_keys(DB, expected_labels):
+    labels = retriving_labels_from_keys(DB)
+    assert len(labels) > 0 and type(labels) == list, "The labels should be a non-empty list."

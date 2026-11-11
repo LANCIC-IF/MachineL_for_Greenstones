@@ -3,7 +3,7 @@ import numpy as np
 
 from Basic_Functions.PCA import PCA 
 
-#-----------------------starting test cases for PCA function-----------------------
+#-----------------------manual numerical case -----------------------
 
 example_data = np.array([[1, -1],
                             [0, 1],
@@ -14,13 +14,23 @@ example_data = np.array([[1, -1],
 manual_eigenvectors = np.array([[1, 1],
                                 [-1, 1]]) * (1 / np.sqrt(2))
 
-manual_eigenvalues = np.array([3/2, 1/2]) #eigenvalues from manual calculation
+#eigenvalues from manual calculation
+manual_eigenvalues = np.array([3/2, 1/2])
+
+#manual prpyected data onto the new feature space using the manual eigenvectors
+manual_projected_data = np.array([[2, 0],
+                            [-1, 1],
+                            [-1, -1]]) * (1 / np.sqrt(2))
 
 
 numpy_eigenvectors = np.array([[-1, -1],
                                 [-1, 1]]) * (1 / np.sqrt(2)) #numpy returns from lower to higher eigenvalue and inverted signs from the manual calculation
 
 numpy_eigenvalues = np.array([1/2,3/2]) #numpy returns from lower to higher eigenvalue
+
+numpy_projected_data = np.array([[0, -np.sqrt(2)],
+                            [1, 0],
+                            [-1, np.sqrt(2)]])
 
 
 

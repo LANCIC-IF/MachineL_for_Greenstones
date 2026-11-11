@@ -34,6 +34,16 @@ def retriving_keys_from_DB(DB: dict) -> list:
         print(f"Error occurred while retrieving keys from the database: {e}")
         return []
 
+
+def retriving_labels_from_keys(DB: dict) -> list:
+    try:
+        first_label = [key.split('_')[0] for key in DB.keys()]
+        second_label = [key.split('_')[1] for key in DB.keys()] 
+        
+        return list(zip(first_label, second_label))
+    except Exception as e:
+        print(f"Error occurred while retrieving labels from keys: {e}, check the format of the keys in the database.")
+        return []
 #----------------------------------------------------------------------------------------------
 
 if __name__ == "__main__":

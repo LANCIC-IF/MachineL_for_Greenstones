@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "basic funcions for processing signals" 
 authors = [{name = "Liat Colmenares", email = "liat@estudiantes.fisica.unam.mx"}]
 readme = "README.md"
-dependencies = ["numpy", "matplotlib", "pandas", "pybaselines", "SciPy"]
+dependencies = ["numpy", "matplotlib", "pandas", "pybaselines", "SciPy", "scikit-learn", "plotly"]
 
 [project.optional-dependencies]
 test = ["pytest>=6.0"]

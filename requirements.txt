@@ -4,5 +4,9 @@ pandas
 pybaselines
 SciPy
 
+#ML dependencies
+scikit-learn
+
+
 #optional dependencies
 pytest
