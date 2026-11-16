@@ -1,3 +1,4 @@
+from cProfile import label
 import json
 import os
 import numpy as np
@@ -37,13 +38,24 @@ def retriving_keys_from_DB(DB: dict) -> list:
 
 def retriving_labels_from_keys(DB: dict) -> list:
     try:
-        first_label = [key.split('_')[0] for key in DB.keys()]
-        second_label = [key.split('_')[1] for key in DB.keys()] 
+        first_label = [key.split('_')[0].lower() for key in DB.keys()]
+        second_label = [key.split('_')[1].lower() for key in DB.keys()] 
         
         return list(zip(first_label, second_label))
     except Exception as e:
         print(f"Error occurred while retrieving labels from keys: {e}, check the format of the keys in the database.")
         return []
+
+
+def removing_specific_datafrom_label (DB: dict, label_to_remove: str) -> dict:
+    try:
+
+        clean_DB = {key: label for key, label in DB.items() if label_to_remove.lower() not in key.lower()}
+        return clean_DB
+
+    except Exception as e:
+        print(f"Error occurred while removing specific data from the database: {e}")
+        return DB  # Return the original DB if an error occurs
 #----------------------------------------------------------------------------------------------
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@ from pybaselines import Baseline, utils
 import matplotlib.pyplot as plt
 import math
 
+#------------------------------functions------------------------------
 
 def wavenumber(complete_spectra: np.ndarray, start_wavenumber: float, end_wavenumber: float) -> np.ndarray:
     

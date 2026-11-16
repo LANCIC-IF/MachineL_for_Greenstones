@@ -1,13 +1,13 @@
 import pytest 
 import numpy as np 
 #importing internal functions
-from Basic_Functions.reading_functions_fromDB import load_DB_from_JSON, get_spectrum_from_DB, retriving_labels_from_keys, retriving_keys_from_DB
+from Basic_Functions.reading_functions_fromDB import load_DB_from_JSON, get_spectrum_from_DB, retriving_labels_from_keys, retriving_keys_from_DB, removing_specific_datafrom_label
 
 
 #--------------Testing DB's -------------------------------------------------------
 
-example_DB = r"C:\Users\liatc\OneDrive\Documentos\GreenStone_Yaxchilan\Database\Yaxchilan_Alpha1_septiembre_2019_tumba_1_Reflectance_DB.json"
-empty_DB = r"C:\Users\liatc\OneDrive\Documentos\GreenStone_Yaxchilan\Test\empty_json.json"
+example_DB = r"C:\licha\MachineL_for_Greenstones\Database\Yaxchilan_Alpha1_septiembre_2019_tumba_1_Reflectance_DB.json"
+empty_DB = r"C:\licha\MachineL_for_Greenstones\Test\empty_json.json"
 
 #--------------Test for load DB correctly-----------------
 
@@ -43,7 +43,13 @@ def test_retriving_keys_from_DB_empty(DB: dict = load_DB_from_JSON(empty_DB)):
     
 
 #test for retriving labels from keys, specialized for the format of the keys in the DB, which is "label1_label2"_number.0
-@pytest.mark.parametrize("DB, expected_labels", [({"blanco_frente_1.0": [0,1,2], "blanco_reverso_1.0S": [0,1,2]}, [("blanco", "frente"), ("blanco", "reverso")])])
+@pytest.mark.parametrize("DB, expected_labels", [({"Blanco_frente_1.0": [0,1,2], "Blanco_reverso_1.0S": [0,1,2]}, [("blanco", "frente"), ("blanco", "reverso")])])
 def test_retriving_labels_from_keys(DB, expected_labels):
     labels = retriving_labels_from_keys(DB)
     assert len(labels) > 0 and type(labels) == list, "The labels should be a non-empty list."
+
+
+@pytest.mark.parametrize("DB, label_to_remove, expected_DB", [({"blanco_frente_1.0": [0,1,2], "blanco_reverso_1.0S": [0,1,2], "jaguar_frente_1.0": [0,1,2]}, "blanco", {"jaguar_frente_1.0": [0,1,2]}),
+                         ({"blanco_frente_1.0": [0,1,2], "blanco_reverso_1.0S": [0,1,2], "jaguar_frente_1.0": [0,1,2]}, "reverso", {"blanco_frente_1.0": [0,1,2], "jaguar_frente_1.0": [0,1,2]})])
+def test_removing_specific_datafrom_label(DB, label_to_remove, expected_DB):
+    assert removing_specific_datafrom_label(DB, label_to_remove) == expected_DB
