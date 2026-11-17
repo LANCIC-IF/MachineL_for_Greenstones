@@ -6,7 +6,7 @@ from Basic_Functions.reading_functions_fromDB import load_DB_from_JSON, get_spec
 
 #--------------Testing DB's -------------------------------------------------------
 
-example_DB = r"C:\licha\MachineL_for_Greenstones\Database\Yaxchilan_Alpha1_septiembre_2019_tumba_1_Reflectance_DB.json"
+example_DB = r"C:\licha\MachineL_for_Greenstones\Database\example_realdata.json"
 empty_DB = r"C:\licha\MachineL_for_Greenstones\Test\empty_json.json"
 
 #--------------Test for load DB correctly-----------------
