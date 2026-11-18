@@ -37,14 +37,24 @@ def retriving_keys_from_DB(DB: dict) -> list:
 
 
 def retriving_labels_from_keys(DB: dict) -> list:
-    try:
-        first_label = [key.split('_')[0].lower() for key in DB.keys()]
-        second_label = [key.split('_')[1].lower() for key in DB.keys()] 
-        
-        return list(zip(first_label, second_label))
-    except Exception as e:
-        print(f"Error occurred while retrieving labels from keys: {e}, check the format of the keys in the database.")
-        return []
+
+    #reference_name = [key.split('_')[0].lower() for key in DB.keys()]
+    #front_or_Back = [key.split('_')[1].lower() for key in DB.keys()] 
+    #section = [key.split('_')[2].split(".")[0].lower() for key in DB.keys()]
+    #number_of_spectrum = [key.split('_')[2].split(".")[1].lower() for key in DB.keys()]
+
+    parsed_keys = [(key.split('_')[0].lower(), key.split('_')[1].lower(), key.split('_')[2].split(".")[0].lower(), key.split('_')[2].split(".")[1].lower()) for key in DB.keys()]
+
+    #return list(zip(reference_name, front_or_Back, section, number_of_spectrum))
+    return parsed_keys
+    
+
+#used to match labels and reflectance data by position 
+def retriving_labels_and_data_from_DB(DB: dict) -> tuple:
+    labels = retriving_labels_from_keys(DB)
+    data = np.array(list(DB.values()))
+    return labels, data
+
 
 
 def removing_specific_datafrom_label (DB: dict, label_to_remove: str) -> dict:
@@ -59,4 +69,4 @@ def removing_specific_datafrom_label (DB: dict, label_to_remove: str) -> dict:
 #----------------------------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    DB = load_DB_from_JSON("path_to_your_json_file.json")
+    "theres nothing here"
