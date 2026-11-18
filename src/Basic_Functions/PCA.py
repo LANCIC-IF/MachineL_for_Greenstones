@@ -37,12 +37,11 @@ def proyecting_data (X: np.ndarray, eigenvectors: np.ndarray, n_components: int)
     return X_projected
     
 
-def generar_pca_3d(
+"""def generar_pca_3d(
     labels: list[tuple], 
     eigenvalues: np.ndarray, 
     projected_data: np.ndarray, 
-    n_components: int = 3
-) -> go.Figure:
+    n_components: int = 3) -> go.Figure:
     
     # Validar que el número de componentes sea compatible con un gráfico 3D
     if n_components != 3:
@@ -102,4 +101,4 @@ def generar_pca_3d(
         margin=dict(l=0, r=0, b=0, t=40)
     )
     
-    return fig
+    return fig"""
