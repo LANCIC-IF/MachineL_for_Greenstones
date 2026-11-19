@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 
 #------------------------------functions------------------------------
 
-def PCA (X: np.ndarray):
+def manual_PCA (X: np.ndarray):
     # Center the data
     X_centered = X - np.mean(X, axis=0)
     
