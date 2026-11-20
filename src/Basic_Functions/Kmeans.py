@@ -154,7 +154,7 @@ def confusion_matrix_of_clas ():
     return 1 
 
 #group fold by K-menas and PCA
-def evaluate_kfold_kmeans(labels: list[tuple], data: np.ndarray, n_splits: int = 3) -> list[dict]:
+def evaluate_kfold_kmeans(labels: list[tuple], data: np.ndarray, n_splits: int = 3, random_state: int = 4) -> list[dict]:
     """
     Realiza la validación cruzada agrupando por pieza de jade y retorna 
     una lista de diccionarios con toda la información necesaria para graficar cada fold.
@@ -172,7 +172,7 @@ def evaluate_kfold_kmeans(labels: list[tuple], data: np.ndarray, n_splits: int =
         X_test_pca = pca.transform(X_test)
         
         # K-Means (ajustado a 3 clústeres como mencionaste)
-        kmeans = KMeans(n_clusters=3, random_state=42)
+        kmeans = KMeans(n_clusters=3, random_state = random_state)
         kmeans.fit(X_train_pca)
         
         predicciones = kmeans.predict(X_test_pca)

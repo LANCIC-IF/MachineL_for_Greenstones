@@ -1,5 +1,6 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
+import json
 
 #ML libraries
 import sklearn 
@@ -70,8 +71,8 @@ back_sorted_eigenvalues, back_sorted_eigenvectors = manual_PCA(back_data)
 front_proyected_data = proyecting_data(front_data, front_sorted_eigenvectors, 3)
 back_proyected_data = proyecting_data(back_data, back_sorted_eigenvectors, 3)
 
-front_predictions, front_centroids = whole_data_Kmeans(front_proyected_data, 3, 14, 0.2)
-back_predictions, back_centroids = whole_data_Kmeans(back_proyected_data, 3, 14, 0.2)
+front_predictions, front_centroids = whole_data_Kmeans(front_proyected_data, 3, 58, 0.2)
+back_predictions, back_centroids = whole_data_Kmeans(back_proyected_data, 3, 58, 0.2)
 
 figura = generar_pca_3d_completo(
     labels=front_labels,
@@ -83,10 +84,37 @@ figura = generar_pca_3d_completo(
 
 figura.show()
 
+#figura.write_html("C:/Users/liatc/OneDrive/Documentos/GreenStone_Yaxchilan/Case_Study/whole_Kmeans_front_seed58.html")
+
+#----------------------testing whole dataset with diferent seeds ---------------------
+
+seed_values = [1, 14, 58, 100, 240, 500, 35, 75, 90, 120, 4]
+
+centroids = {}
+
+for seed in seed_values:
+    front_predictions, front_centroids = whole_data_Kmeans(front_proyected_data, 3, seed, 0.2)
+    
+    centroids[f"seed = {seed}"] = np.array2string(front_centroids)
+
+with open ("wholedata_KmeansCenters.json", "w", encoding = "utf-8") as archivo: 
+    json.dump (centroids, archivo, indent=4, ensure_ascii=False)
+
+
 #Group --------------------------
-#group_Kmeans_results = evaluate_kfold_kmeans(front_labels, front_data, n_splits=2)
+group_Kmeans_results = evaluate_kfold_kmeans(front_labels, front_data, n_splits=2)
 
 """for fold_result in group_Kmeans_results:
     fig = generar_pca_3d_desde_fold(fold_result)
     fig.show()
 """
+fold_centroids = {}
+
+for seed in seed_values: 
+    group_Kmeans_results = evaluate_kfold_kmeans(front_labels, front_data, n_splits= 3, random_state= seed)
+    
+    fold_centroids[f"seed: {seed}"] = group_Kmeans_results["centroids"]
+    
+    with open ("fold_data_KmeansCenters.json", "w", encoding= "utf-8") as archivo:
+        json.dump (fold_centroids, archivo, indent=4, ensure_ascii=False)
+    
