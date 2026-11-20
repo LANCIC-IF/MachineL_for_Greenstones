@@ -90,6 +90,7 @@ figura.show()
 
 seed_values = [1, 14, 58, 100, 240, 500, 35, 75, 90, 120, 4]
 
+"""#whole data--------------------
 centroids = {}
 
 for seed in seed_values:
@@ -101,20 +102,30 @@ with open ("wholedata_KmeansCenters.json", "w", encoding = "utf-8") as archivo:
     json.dump (centroids, archivo, indent=4, ensure_ascii=False)
 
 
-#Group --------------------------
-group_Kmeans_results = evaluate_kfold_kmeans(front_labels, front_data, n_splits=2)
+#GroupFold method -----------------
+group_Kmeans_results = evaluate_kfold_kmeans(front_labels, front_proyected_data, n_splits=2)
 
-"""for fold_result in group_Kmeans_results:
+for fold_result in group_Kmeans_results:
     fig = generar_pca_3d_desde_fold(fold_result)
     fig.show()
-"""
+
 fold_centroids = {}
 
 for seed in seed_values: 
-    group_Kmeans_results = evaluate_kfold_kmeans(front_labels, front_data, n_splits= 3, random_state= seed)
-    
-    fold_centroids[f"seed: {seed}"] = group_Kmeans_results["centroids"]
-    
-    with open ("fold_data_KmeansCenters.json", "w", encoding= "utf-8") as archivo:
-        json.dump (fold_centroids, archivo, indent=4, ensure_ascii=False)
-    
+    group_Kmeans_results = evaluate_kfold_kmeans(front_labels, front_proyected_data, n_splits= 3, random_state= seed)
+
+    fold_centroids[f"seed: {seed}"] = {
+        f"fold: {fold_result['fold_numero']}": fold_result["centroids"].tolist()
+        for fold_result in group_Kmeans_results
+    }
+
+with open("fold_data_KmeansCenters.json", "w", encoding="utf-8") as archivo:
+    json.dump(fold_centroids, archivo, indent=4, ensure_ascii=False)"""
+
+
+#Bootstrap method -----------------
+
+X_boot1, X_boot2, X_boot3 = Boot_strap(front_proyected_data, replace = True, n_samples= 3, random_state= 1)
+
+print(X_boot1.shape)
+print(X_boot1)

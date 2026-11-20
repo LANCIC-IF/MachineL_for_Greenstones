@@ -5,12 +5,14 @@ import pandas as pd
 from sklearn.model_selection import GroupKFold
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
+from sklearn.model_selection import train_test_split
+from sklearn.utils import resample 
 
 #plot libraries 
 import plotly.express as px
 import plotly.graph_objects as go
-from sklearn.cluster import KMeans
-from sklearn.model_selection import train_test_split
+
+
 
 #---------------------------------PCA and Kmeans----------------------------------------
 
@@ -149,11 +151,18 @@ def generar_pca_3d_completo(
 
     return fig
 
-
+#confusion matrix for whole data kmeans
 def confusion_matrix_of_clas ():
     return 1 
 
-#group fold by K-menas and PCA
+
+#def Bootstrap
+def Boot_strap (DB: np.ndarray, replace = True, n_samples: int = 1 , random_state: int = 1) -> np.ndarray :
+    X_boot = resample(DB, replace= replace, n_samples = n_samples, random_state= random_state)
+    return X_boot
+
+
+#group fold by K-means and PCA
 def evaluate_kfold_kmeans(labels: list[tuple], data: np.ndarray, n_splits: int = 3, random_state: int = 4) -> list[dict]:
     """
     Realiza la validación cruzada agrupando por pieza de jade y retorna 
